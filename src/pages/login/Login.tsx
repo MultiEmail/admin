@@ -100,26 +100,26 @@ const Login: FC = () => {
 					</div>
 					{/*form*/}
 					<div className="flex w-[90%] flex-col gap-2 text-[#3F72AF]">
-						<label htmlFor="email" className="text-[14px]">
+						<label htmlFor="email" className="text-[14px] font-normal">
 							Email
 						</label>
 						<input
 							type="email"
 							id="email"
 							{...formik.getFieldProps("email")}
-							className="rounded-md px-2 py-1 text-[12px] placeholder-[#3f72af]"
+							className="rounded-md px-2 py-1 text-[12px] font-light placeholder-[#3f72af]"
 							placeholder="example@multiemail.us"
 						/>
 					</div>
 					<div className="relative flex w-[90%] flex-col gap-2 text-[#3F72AF]">
-						<label htmlFor="password" className="text-[14px]">
+						<label htmlFor="password" className="text-[14px] font-normal">
 							Password
 						</label>
 						<input
 							type={isPasswordVisible ? "text" : "password"}
 							id="password"
 							{...formik.getFieldProps("password")}
-							className="rounded-md px-2 py-1 text-[12px] placeholder-[#3f72af]"
+							className="rounded-md px-2 py-1 text-[12px] font-light placeholder-[#3f72af]"
 							placeholder="password"
 						/>
 						{isPasswordVisible ? (
@@ -136,11 +136,11 @@ const Login: FC = () => {
 					</div>
 					<button
 						type="submit"
-						className="rounded-md bg-[#5271ff] px-2 py-1 text-[14px] text-white"
+						className="rounded-md bg-[#5271ff] px-2 py-1 text-[14px] text-white font-normal font-light"
 					>
 						Log In
 					</button>
-					<p className="text-[12px]">
+					<p className="text-[12px] font-normal">
 						Don't have an account yet?
 						<Link to="/signup" className="text-[#5271ff] underline">
 							{` Sign Up `}
