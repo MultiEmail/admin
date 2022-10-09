@@ -16,18 +16,34 @@ import {
 import { useFormik } from "formik";
 
 const Login: FC = () => {
-	// const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+
+	/**
+	 * form initial values
+	 * @constant
+	 * @author Tchakoumi
+	 */
 
 	const initialValues: { email: string; password: string } = {
 		email: "",
 		password: "",
 	};
 
+	/**
+	 * form validation schema
+	 * @constant
+	 * @author Tchakoumi
+	 */
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email().required(),
 		password: Yup.string().required(),
 	});
+
+	/**
+	 * Formik variable to manage form
+	 * @constant
+	 * @author Tchakoumi
+	 */
 
 	const formik = useFormik({
 		initialValues,
@@ -48,7 +64,7 @@ const Login: FC = () => {
 	/**
 	 * Weather password should be visible or not
 	 * @constant
-	 * @author KanLSK
+	 * @author Tchakoumi
 	 */
 	const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
