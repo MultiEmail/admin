@@ -6,7 +6,7 @@ const App: FC = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/login" element={<Login />} />
+				<Route path="/" element={<Login />} />
 			</Routes>
 		</BrowserRouter>
 	);
