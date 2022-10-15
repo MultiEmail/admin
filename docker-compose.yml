@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  frontend:
+    container_name: MultiEmail-admin-dev
+    stdin_open: true
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - "/usr/src/app/node_modules"
+      - "./:/usr/src/app"
