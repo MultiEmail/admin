@@ -1,11 +1,12 @@
 import { FC, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import Tooltip from "../../components/tooltip/Tooltip";
 
 import * as Yup from "yup";
 
 //import photos
 import vector from "../../assets/photos/vector-login.svg";
-import logo from "../../assets/logos/icon-transparent.svg";
 
 //import icons
 import {
@@ -13,10 +14,21 @@ import {
 	AiFillEye,
 	AiFillEyeInvisible,
 } from "react-icons/ai";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { useFormik } from "formik";
+import { loginHandler } from "../../actions/auth.actions";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { AxiosError } from "axios";
+import { IAPIResponseError } from "../../utils/api.util";
 
 const Login: FC = () => {
+	
+	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+	
+	const [canShowTooltip, setCanShowTooltip] = useState<boolean>(false);
+	const [tooltipMessage, setTooltipMessage] = useState<string>("");
+	const [tooltipType, setTooltipType] = useState<"error" | "success">("success");
 
 	/**
 	 * form initial values
@@ -45,18 +57,42 @@ const Login: FC = () => {
 	 * @author Tchakoumi
 	 */
 
-	const formik = useFormik({
+	 const { values, errors, handleBlur, isSubmitting, handleSubmit, handleChange, resetForm } = useFormik({
 		initialValues,
 		validationSchema,
 		onSubmit: async (values, { resetForm }) => {
 			try {
-				//TODO: CALL API TO LOGIN HERE. submit value is values of type: {email: string; password:string}
-				alert(JSON.stringify(values));
-				resetForm();
-				navigate("/");
-				// TODO: show feedback on UI
-			} catch (err) {
-				// TODO: show feedback on UI
+				const res = await dispatch(loginHandler(values)) as any;
+
+				if(res.data?.role === "admin") {
+					setTooltipMessage("You have been logged in successfully!");
+					setTooltipType("success");
+					setCanShowTooltip(true);
+					resetForm();
+					setTimeout(() => {
+						setCanShowTooltip(false);
+					}, 3000);
+					navigate("/dashboard");
+
+				} else {
+					setTooltipMessage("Something went wrong! Please try again later.");
+					setTooltipType("error");
+					setCanShowTooltip(true);
+					setTimeout(() => {
+						setCanShowTooltip(false);
+					}
+					, 3000);
+				}
+			
+			}
+			catch (e) {
+				const msg = "Something went wrong! Please try again later.";
+				setTooltipMessage(msg);
+				setTooltipType("error");
+				setCanShowTooltip(true);
+				setTimeout(() => {
+					setCanShowTooltip(false);
+				}, 3000);
 			}
 		},
 	});
@@ -69,87 +105,98 @@ const Login: FC = () => {
 	const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
 	return (
-		<div className="absolute top-0 left-0 grid h-screen w-screen place-items-center bg-white font-poppins ">
-			<div className="rounded relative flex h-auto w-[90vw] max-w-6xl flex-col items-center justify-center gap-4 bg-[#DBE2EF] py-10 md:h-[60vh] md:w-[70vw] md:flex-row md:justify-around">
-				{/*icon for redirect to home */}
-				<Link to="/" className="absolute top-2 left-2">
-					<div className="back-arrow rounded py-1 px-2">
-						<AiOutlineArrowLeft className="text-xl" />
-					</div>
-				</Link>
+	<AnimatePresence>
+		<motion.div className="flex flex-col font-poppins justify-center items-center h-screen w-screen no-select" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{duration: 0.5,}}>
+			<div className="flex flex-row bg-[#dbe2ef70] justify-center items rounded-[10px] h-fit w-[80%] p-3 lg:p-3 shadow-lg box-shadow lg:min-h-[50vh]">
+				{/* The icon isn't necessary since the base route is Authentication. */}
+				{/* <div className="absolute bottom-[15vh] lg:flex p-3 h-fit hover:bg-gray-300 duration-300 rounded-full" onClick={() => {
+					navigate(-1);
+				}}>
+					<AiOutlineArrowLeft className="w-[22px] h-[22px]"/>
+				</div> */}
 				{/*logo*/}
-				<div className="md:hidden w-fit items-center gap-1 flex">
-					<img src={logo} alt="logo" className="w-[50px]" />
-					<p className="text-lg">Multi Email</p>
-				</div>
-				{/*image section */}
-				<div className="flex h-[30vh] w-[90%] items-center md:w-[50%] max-w-sm">
-					<img src={vector} alt="vector" />
-				</div>
-				{/*separate line*/}
-				<div className="h-[1px] w-[95%] rounded-full border-2 border-[#3f71af60] bg-[#6398da60] md:h-[30vh] md:w-[0px]" />
-				{/*form section */}
-				<form
-					onSubmit={formik.handleSubmit}
-					className="flex w-[90%] flex-col items-center gap-3 md:w-[40%] mt-2 md:mt-0"
-				>
-					{/*logo*/}
-					<div className="hidden w-fit items-center gap-1 md:flex">
-						<img src={logo} alt="logo" className="w-[40px]" />
-						<p>Multi Email</p>
+				<div className="flex flex-row justify-center">
+
+					{/*image section */}
+					<div className="hidden lg:flex w-[50%] justify-center items-center mx-10">
+						<img src={vector} alt="vector" className="flex w-[90%] h-[90%]" />
 					</div>
-					{/*form*/}
-					<div className="flex w-[90%] flex-col gap-2 text-[#3F72AF]">
-						<label htmlFor="email" className="text-[14px]">
-							Email
-						</label>
-						<input
-							type="email"
-							id="email"
-							{...formik.getFieldProps("email")}
-							className="rounded-md px-2 py-1 text-[12px] placeholder-[#3f72af]"
-							placeholder="example@multiemail.us"
-						/>
-					</div>
-					<div className="relative flex w-[90%] flex-col gap-2 text-[#3F72AF]">
-						<label htmlFor="password" className="text-[14px]">
-							Password
-						</label>
-						<input
-							type={isPasswordVisible ? "text" : "password"}
-							id="password"
-							{...formik.getFieldProps("password")}
-							className="rounded-md px-2 py-1 text-[12px] placeholder-[#3f72af]"
-							placeholder="password"
-						/>
-						{isPasswordVisible ? (
-							<AiFillEyeInvisible
-								className="absolute right-2 top-[60%]"
-								onClick={() => setIsPasswordVisible(false)}
+					{/*separate line*/}
+					<div className="hidden lg:flex h-[80%] place-self-center border-r-[3px] rounded-sm border-r-[#3F72AF] opacity-60"/>
+					{/*form section */}
+					<form onSubmit={handleSubmit} className="flex flex-col lg:w-[50%] justify-center items-center lg:ml-10">
+						
+						{/*logo*/}
+						<div className="flex flex-row my-2">
+							<MdOutlineAdminPanelSettings className="w-[28px] h-[28px] text-[#5271FF]"/>
+							<p className="flex ml-2 text-xl items-center">Admin Dashboard</p>
+						</div>
+
+						{/*form*/}
+						<div className="flex flex-col my-2 w-full">
+							<label htmlFor="email" className="text-[#112D4E] text-sm">
+								Email
+							</label>
+							<input
+								type="text"
+								id="email"
+								className={"outline-none border-2 text-[15px] border-white h-full rounded-[10px] p-2 mt-2 focus:border-[#112D4E70] transition-colors duration-300 placeholder-[#112D4E60]" + (errors.email ? " border-[#FF0000]" : " border-blue-600")}
+								placeholder="example@email.com"
+								value={values.email}
+								onChange={handleChange}
+								onBlur={handleBlur}
 							/>
-						) : (
-							<AiFillEye
-								className="absolute right-2 top-[60%]"
-								onClick={() => setIsPasswordVisible(true)}
+						</div>
+						<div className="relative flex flex-col my-2 w-full">
+							<label htmlFor="password" className="text-[14px]">
+								Password
+							</label>
+							<input
+								type={isPasswordVisible ? "text" : "password"}
+								id="password"
+								className={"outline-none border-2 text-[15px] border-white h-full rounded-[10px] p-2 mt-2 focus:border-[#112D4E70] transition-colors duration-300 placeholder-[#112D4E60]" + (errors.password ? " border-[#FF0000]" : " border-blue-600")}
+								placeholder="password"
+								value={values.password}
+								onChange={handleChange}
+								onBlur={handleBlur}
 							/>
-						)}
-					</div>
-					<button
-						type="submit"
-						className="rounded-md bg-[#5271ff] px-2 py-1 text-[14px] text-white"
-					>
-						Log In
-					</button>
-					<p className="text-[12px]">
-						Don't have an account yet?
-						<Link to="/signup" className="text-[#5271ff] underline">
-							{` Sign Up `}
-						</Link>
-						here
-					</p>
-				</form>
+							{isPasswordVisible ? (
+								<AiFillEyeInvisible
+									className="absolute right-2 top-[60%]"
+									onClick={() => setIsPasswordVisible(false)}
+								/>
+							) : (
+								<AiFillEye
+									className="absolute right-2 top-[60%]"
+									onClick={() => setIsPasswordVisible(true)}
+								/>
+							)}
+						</div>
+						<div className="flex flex-col my-2 w-full">
+							<button
+								type="submit"
+								className={"bg-[#5271FF] text-white text-[15px] font-bold py-2 px-4 rounded-[10px] hover:bg-[#112D4E20] duration-300 transition-colors" + (isSubmitting ? " opacity-50 cursor-not-allowed" : "") + (Object.keys(errors).length > 0 ? " opacity-50 cursor-not-allowed" : "")}
+								onClick={(e) => {
+									e.preventDefault();
+									handleSubmit();
+								}}
+							>
+								Log In
+							</button>
+						</div>
+						<p className="text-sm my-2">
+							Need help? <Link to="/help" className="text-[#5271FF]">Help</Link>
+						</p>
+					</form>
+				</div>
 			</div>
-		</div>
+			<AnimatePresence>
+					{
+						canShowTooltip ? <Tooltip type={tooltipType} message={tooltipMessage} /> : null
+					}
+			</AnimatePresence>
+		</motion.div>
+	</AnimatePresence>
 	);
 };
 
