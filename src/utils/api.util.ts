@@ -20,7 +20,20 @@ const API: AxiosInstance = axios.create({
 	timeout: 10000,
 });
 
-// TODO: Add request interceptor to add authorization headers in every request
+/**
+ * This interceptor will add access token to the request header
+ *
+ * @author aayushchugh
+ */
+API.interceptors.request.use((config: AxiosRequestConfig) => {
+	const accessToken = localStorage.getItem("access_token");
+
+	if (!accessToken || !config.headers) return config;
+
+	config.headers["Authorization"] = `Bearer ${accessToken}`;
+
+	return config;
+});
 
 /**
  * This interceptor will format the response and error from API
