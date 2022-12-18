@@ -5,6 +5,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Login from "./pages/login/Login";
 import NotFound from "./pages/not_found/Not_Found";
 import Users from "./pages/users/Users";
+import User from "./pages/users/user/User";
 
 const App: FC = () => {
 	return (
@@ -18,6 +19,7 @@ const App: FC = () => {
 				<Route element={<ProtectedRoutes />}>
 					<Route path="/dashboard" element={<Dashboard />} />
 					<Route path="/users" element={<Users />} />
+					<Route path="/users/:id" element={<User />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>
