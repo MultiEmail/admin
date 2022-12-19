@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import {
+	deleteUserHandler,
 	getSingleUserHandler,
 	markUserAsAdminHandler,
 	markUserAsVerifiedHandler,
@@ -69,6 +70,17 @@ const User: FC = () => {
 		}
 	};
 
+	const onDeleteUser = async () => {
+		try {
+			await dispatch(deleteUserHandler(currentUser?._id as string));
+			setTooltipMessage("User deleted");
+			setTooltipType("success");
+			setCanShowTooltip(true);
+		} finally {
+			navigate("/users");
+		}
+	};
+
 	return (
 		<main>
 			{currentUser && (
@@ -80,6 +92,7 @@ const User: FC = () => {
 
 					<Button onClick={onMarkVerified}>Mark verified</Button>
 					<Button onClick={onMarkAsAdmin}>Mark as Admin</Button>
+					<Button onClick={onDeleteUser}>Delete User</Button>
 
 					<AnimatePresence>
 						{canShowTooltip ? (

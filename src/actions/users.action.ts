@@ -87,3 +87,22 @@ export const markUserAsAdminHandler = (id: string) => {
 		}
 	};
 };
+
+/**
+ * This action will delete a user
+ *
+ * @author aayushchugh
+ */
+export const deleteUserHandler = (id: string) => {
+	return async () => {
+		try {
+			const res = await API.delete<IAPIResponseSuccess>(
+				`/admin/users/${id}`
+			);
+
+			return Promise.resolve(res);
+		} catch (err) {
+			return Promise.reject(err as AxiosError<IAPIResponseError>);
+		}
+	};
+};
