@@ -48,6 +48,11 @@ export const getSingleUserHandler = (id: string) => {
 	};
 };
 
+/**
+ * This action will mark a user as verified
+ *
+ * @author aayushchugh
+ */
 export const markUserAsVerifiedHandler = (id: string) => {
 	return async () => {
 		try {
