@@ -25,3 +25,44 @@ export const getAllUsersHandler = () => {
 		}
 	};
 };
+
+/**
+ * This action will fetch a single user from API
+ *
+ * @param id id of the user to be fetched
+ * @returns response from API
+ */
+export const getSingleUserHandler = (id: string) => {
+	return async () => {
+		try {
+			interface APIResponse extends IAPIResponseSuccess {
+				user: IUser;
+			}
+
+			const res = await API.get<APIResponse>(`/admin/users/${id}`);
+
+			return Promise.resolve(res);
+		} catch (err) {
+			return Promise.reject(err as AxiosError<IAPIResponseError>);
+		}
+	};
+};
+
+/**
+ * This action will mark a user as verified
+ *
+ * @author aayushchugh
+ */
+export const markUserAsVerifiedHandler = (id: string) => {
+	return async () => {
+		try {
+			const res = await API.patch<IAPIResponseSuccess>(
+				`/admin/users/${id}/mark-verified`
+			);
+
+			return Promise.resolve(res);
+		} catch (err) {
+			return Promise.reject(err as AxiosError<IAPIResponseError>);
+		}
+	};
+};

@@ -6,15 +6,9 @@ export interface IUser {
 	role: "admin" | "user";
 	email: string;
 	username: string;
-	password: string;
 	verified: boolean;
 	accepted_terms_and_conditions: boolean;
 	receive_marketing_emails: boolean;
-	verification_code: number;
-	connected_services: {
-		service: "google";
-		email: string;
-	}[];
 	createdAt: Date;
 	updatedAt: Date;
 }

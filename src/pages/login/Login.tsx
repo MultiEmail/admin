@@ -9,14 +9,12 @@ import * as Yup from "yup";
 import vector from "../../assets/photos/vector-login.svg";
 
 //import icons
-import {
-	AiFillEye,
-	AiFillEyeInvisible,
-} from "react-icons/ai";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { useFormik } from "formik";
 import { loginHandler } from "../../actions/auth.actions";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
+import Button from "../../components/button/Button";
 
 const Login: FC = () => {
 	const dispatch = useAppDispatch();
@@ -209,10 +207,8 @@ const Login: FC = () => {
 								)}
 							</div>
 							<div className="flex flex-col my-2 w-full">
-								<button
-									type="submit"
+								<Button
 									className={
-										"bg-[#5271FF] text-white text-[15px] font-bold py-2 px-4 rounded-[10px] hover:bg-[#112D4E20] duration-300 transition-colors" +
 										(isSubmitting
 											? " opacity-50 cursor-not-allowed"
 											: "") +
@@ -226,7 +222,7 @@ const Login: FC = () => {
 									}}
 								>
 									Log In
-								</button>
+								</Button>
 							</div>
 							<p className="text-sm my-2">
 								Need help?{" "}
