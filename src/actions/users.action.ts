@@ -66,3 +66,24 @@ export const markUserAsVerifiedHandler = (id: string) => {
 		}
 	};
 };
+
+/**
+ * This action will mark a user as admin
+ *
+ * @param id id of the user which will be marked as admin
+ *
+ * @author aayushchugh
+ */
+export const markUserAsAdminHandler = (id: string) => {
+	return async () => {
+		try {
+			const res = await API.patch<IAPIResponseSuccess>(
+				`/admin/users/${id}/mark-admin`
+			);
+
+			return Promise.resolve(res);
+		} catch (err) {
+			return Promise.reject(err as AxiosError<IAPIResponseError>);
+		}
+	};
+};

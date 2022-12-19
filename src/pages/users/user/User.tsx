@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import {
 	getSingleUserHandler,
+	markUserAsAdminHandler,
 	markUserAsVerifiedHandler,
 } from "../../../actions/users.action";
 import { IUser } from "../../../slices/user.slice";
@@ -57,6 +58,17 @@ const User: FC = () => {
 		}
 	};
 
+	const onMarkAsAdmin = async () => {
+		try {
+			await dispatch(markUserAsAdminHandler(currentUser?._id as string));
+			setTooltipMessage("User marked as admin");
+			setTooltipType("success");
+			setCanShowTooltip(true);
+		} finally {
+			fetchCurrentUser();
+		}
+	};
+
 	return (
 		<main>
 			{currentUser && (
@@ -64,8 +76,10 @@ const User: FC = () => {
 					<h1>{currentUser.username}</h1>
 					<h1>{currentUser.email}</h1>
 					<h1>{currentUser.verified.toString()}</h1>
+					<h1>{currentUser.role}</h1>
 
 					<Button onClick={onMarkVerified}>Mark verified</Button>
+					<Button onClick={onMarkAsAdmin}>Mark as Admin</Button>
 
 					<AnimatePresence>
 						{canShowTooltip ? (
