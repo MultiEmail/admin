@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 import API, { IAPIResponseError, IAPIResponseSuccess } from "../utils/api.util";
-
+import { Dispatch } from "@reduxjs/toolkit";
+import { IUser, usersActions } from "../slices/user.slice";
 
 export interface ILoginPayload {
 	email: string;
@@ -36,7 +37,6 @@ export const loginHandler = (payload: ILoginPayload) => {
 	};
 };
 
-
 export interface IVerificationPayload {
 	verificationCode: Number;
 }
@@ -54,14 +54,40 @@ export const verifyHandler = (payload: IVerificationPayload, token: String) => {
 		}
 
 		try {
-			const res = await API.get<APIResponse>(`/auth/verify/${payload.verificationCode}`, {
-				headers: {
-					"Authorization": `Bearer ${token}`,
+			const res = await API.get<APIResponse>(
+				`/auth/verify/${payload.verificationCode}`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
 				}
-			});
+			);
 			return Promise.resolve(res);
 		} catch (err) {
 			return Promise.reject(err as AxiosError<IAPIResponseError>);
 		}
 	};
-}
+};
+
+/**
+ * This function will get current user from `/auth/me` route
+ *
+ * @author aayushchugh
+ */
+export const getCurrentUserHandler = () => {
+	return async (dispatch: Dispatch) => {
+		try {
+			interface APIResponse extends IAPIResponseSuccess {
+				user: IUser;
+			}
+
+			const res = await API.get<APIResponse>("/auth/me");
+
+			dispatch(usersActions.replaceCurrentUser(res.data.user));
+
+			return Promise.resolve(res);
+		} catch (err) {
+			return Promise.reject(err as AxiosError<IAPIResponseError>);
+		}
+	};
+};

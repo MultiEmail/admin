@@ -1,15 +1,23 @@
-/**
- * TODO:
- * 1. Store the access_token, refresh_token, role in the store.
- * 2. Check if the access_token is valid and exists.
- * 3. If the access_token is valid, then return the Outlet otherwise return the Login/Unauthorized component.
- *
- */
-
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { getCurrentUserHandler } from "../../actions/auth.actions";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { TRootState } from "../../store";
+import Login from "../../pages/login/Login";
 
+/**
+ * @author aayushchugh, is-it-ayush
+ */
 const ProtectedRoutes = () => {
-	return <Outlet />;
+	const dispatch = useAppDispatch();
+	const { currentUser } = useAppSelector((state: TRootState) => state.users);
+
+	useEffect(() => {
+		dispatch(getCurrentUserHandler());
+	}, [dispatch]);
+
+	return currentUser ? <Outlet /> : <Login />;
 };
 
 export default ProtectedRoutes;
