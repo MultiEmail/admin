@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Tooltip from "../../components/tooltip/Tooltip";
@@ -15,16 +15,29 @@ import { useFormik } from "formik";
 import { loginHandler } from "../../actions/auth.actions";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import Button from "../../components/button/Button";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { TRootState } from "../../store";
 
 const Login: FC = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+
+	const { currentUser } = useAppSelector((state: TRootState) => state.users);
 
 	const [canShowTooltip, setCanShowTooltip] = useState<boolean>(false);
 	const [tooltipMessage, setTooltipMessage] = useState<string>("");
 	const [tooltipType, setTooltipType] = useState<"error" | "success">(
 		"success"
 	);
+
+	/**
+	 * This useEffect will redirect user to dashboard if he is already logged in
+	 *
+	 * @author aayushchugh
+	 */
+	useEffect(() => {
+		if (currentUser) navigate("/dashboard");
+	}, [currentUser]);
 
 	/**
 	 * form initial values
