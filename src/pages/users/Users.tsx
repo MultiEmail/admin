@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { getAllUsersHandler } from "../../actions/users.action";
 import { useAppSelector } from "../../hooks/useAppSelector";
@@ -18,34 +18,36 @@ const Users: FC = () => {
 
 	return (
 		<main>
-			<table className="table-auto">
-				<thead>
+			<table className="table-auto w-screen text-sm text-left text-gray-500 dark:text-gray-400 my-3">
+				<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 					<tr>
-						<th>username</th>
-						<th>email</th>
-						<th>verified</th>
-						<th>receive marketing emails</th>
+						<th scope="col" className="py-3 px-6">username</th>
+						<th scope="col" className="py-3 px-6">email</th>
+						<th scope="col" className="py-3 px-6">verified</th>
+						<th scope="col" className="py-3 px-6">receive marketing emails</th>
 					</tr>
 				</thead>
 				<tbody>
 					{records.map((record) => (
-						<tr key={record._id}>
-							<td>
+						<tr key={record._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+							<td className="py-4 px-6">
 								<Link to={`/users/${record._id}`}>
 									{record.username}
 								</Link>
 							</td>
-							<td>{record.email}</td>
-							<td>{record.verified.toString()}</td>
-							<td>
+							<td className="py-4 px-6">{record.email}</td>
+							<td className="py-4 px-6">{record.verified.toString()}</td>
+							<td className="py-4 px-6">
 								{record.receive_marketing_emails.toString()}
 							</td>
 						</tr>
-					))}
+						
+					) )}
 				</tbody>
 			</table>
 		</main>
 	);
+			
 };
 
 export default Users;
