@@ -18,30 +18,29 @@ const Users: FC = () => {
 
 	return (
 		<main>
-			<table className="table-auto w-screen text-sm text-left text-gray-500 dark:text-gray-400 my-3">
-				<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+			<table className="table-auto w-screen shadow-lg bg-white border-collapse border-2 my-3">
+				 <thead className="text-xs text-gray-700 uppercase bg-white-50 white:bg-gray-700 dark:text-dark-400 border-2" >
 					<tr>
-						<th scope="col" className="py-3 px-6">username</th>
-						<th scope="col" className="py-3 px-6">email</th>
-						<th scope="col" className="py-3 px-6">verified</th>
-						<th scope="col" className="py-3 px-6">receive marketing emails</th>
+						<th scope="col" className="bg-blue-100 border-2 text-left px-8 py-4">username</th>
+						<th scope="col" className="bg-blue-100 border-2 text-left px-8 py-4">email</th>
+						<th scope="col" className="bg-blue-100 border-2 text-left px-8 py-4">verified</th>
+						<th scope="col" className="bg-blue-100 border-2 text-left px-8 py-4">receive marketing emails</th>
 					</tr>
 				</thead>
 				<tbody>
 					{records.map((record) => (
-						<tr key={record._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-							<td className="py-4 px-6">
+						<tr key={record._id} className="bg-white border-b white:bg-gray-800 dark:border-gray-700 border-2">
+							<td className="border-2 px-8 py-4">
 								<Link to={`/users/${record._id}`}>
 									{record.username}
 								</Link>
 							</td>
-							<td className="py-4 px-6">{record.email}</td>
-							<td className="py-4 px-6">{record.verified.toString()}</td>
-							<td className="py-4 px-6">
+							<td className="border-2 px-8 py-4">{record.email}</td>
+							<td className="border-2 px-8 py-4">{record.verified.toString()}</td>
+							<td className="border-2 px-8 py-4">
 								{record.receive_marketing_emails.toString()}
 							</td>
-						</tr>
-						
+						</tr>	
 					) )}
 				</tbody>
 			</table>
