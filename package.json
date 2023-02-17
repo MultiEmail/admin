@@ -38,7 +38,7 @@
 		"all-contributors-cli": "6.24.0",
 		"commitlint": "17.4.3",
 		"husky": "8.0.3",
-		"tailwindcss": "3.2.6"
+		"tailwindcss": "3.2.7"
 	},
 	"eslintConfig": {
 		"extends": [
