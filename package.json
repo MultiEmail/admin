@@ -23,7 +23,7 @@
 		"typescript": "5.2.2",
 		"web-vitals": "3.5.0",
 		"yarn": "^1.22.19",
-		"yup": "1.0.2"
+		"yup": "1.4.0"
 	},
 	"scripts": {
 		"start": "yarn && react-scripts start",
